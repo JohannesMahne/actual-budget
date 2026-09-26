@@ -145,6 +145,12 @@ export type Modal =
       };
     }
   | {
+      name: 'investec-init';
+      options: {
+        onSuccess: () => void;
+      };
+    }
+  | {
       name: 'enablebanking-init';
       options: {
         onSuccess: () => void;

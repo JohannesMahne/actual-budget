@@ -100,6 +100,8 @@ const mappableFields: MappableField[] = [
       'meta.reference',
       'meta.other_account',
       'meta.card_suffix',
+      'transactionType',
+      'cardNumber',
     ],
   },
 ];

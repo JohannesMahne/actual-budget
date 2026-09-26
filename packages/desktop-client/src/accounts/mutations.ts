@@ -9,6 +9,7 @@ import type {
   SyncServerAkahuAccount,
   SyncServerEnableBankingAccount,
   SyncServerGoCardlessAccount,
+  SyncServerInvestecAccount,
   SyncServerPluggyAiAccount,
   SyncServerSimpleFinAccount,
   TransactionEntity,
@@ -541,6 +542,48 @@ export function useLinkAccountAkahuMutation() {
       dispatchErrorNotification(
         dispatch,
         t('There was an error linking the account to Akahu. Please try again.'),
+        error,
+      );
+    },
+  });
+}
+
+type LinkAccountInvestecPayload = LinkAccountBasePayload & {
+  externalAccount: SyncServerInvestecAccount;
+};
+
+export function useLinkAccountInvestecMutation() {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+
+  return useMutation({
+    mutationFn: async ({
+      externalAccount,
+      upgradingId,
+      offBudget,
+      startingDate,
+      startingBalance,
+    }: LinkAccountInvestecPayload) => {
+      await send('investec-accounts-link', {
+        externalAccount,
+        upgradingId,
+        offBudget,
+        startingDate,
+        startingBalance,
+      });
+    },
+    onSuccess: () => {
+      invalidateQueries(queryClient);
+      invalidateQueries(queryClient, payeeQueries.lists());
+    },
+    onError: error => {
+      console.error('Error linking account to Investec:', error);
+      dispatchErrorNotification(
+        dispatch,
+        t(
+          'There was an error linking the account to Investec. Please try again.',
+        ),
         error,
       );
     },

@@ -53,6 +53,7 @@ import { GoCardlessExternalMsgModal } from './modals/GoCardlessExternalMsgModal'
 import { GoCardlessInitialiseModal } from './modals/GoCardlessInitialiseModal';
 import { HoldBufferModal } from './modals/HoldBufferModal';
 import { ImportTransactionsModal } from './modals/ImportTransactionsModal';
+import { InvestecInitialiseModal } from './modals/InvestecInitialiseModal';
 import { KeyboardShortcutModal } from './modals/KeyboardShortcutModal';
 import { LoadBackupModal } from './modals/LoadBackupModal';
 import { ConfirmChangeDocumentDirModal } from './modals/manager/ConfirmChangeDocumentDir';
@@ -201,6 +202,9 @@ export function Modals() {
 
         case 'akahu-init':
           return <AkahuInitialiseModal key={key} {...modal.options} />;
+
+        case 'investec-init':
+          return <InvestecInitialiseModal key={key} {...modal.options} />;
 
         case 'enablebanking-init':
           return <EnableBankingInitialiseModal key={key} {...modal.options} />;
