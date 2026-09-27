@@ -12,29 +12,54 @@ const HEADER_HEIGHT = 50;
 
 type PageHeaderProps = {
   title: ReactNode;
+  subtitle?: ReactNode;
+  actions?: ReactNode;
   style?: CSSProperties;
 };
 
-export function PageHeader({ title, style }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  subtitle,
+  actions,
+  style,
+}: PageHeaderProps) {
   return (
     <View
       style={{
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
+        gap: 12,
         marginLeft: 20,
+        marginRight: 20,
+        marginBottom: 12,
         ...style,
       }}
     >
-      <View
-        style={{
-          flexDirection: 'row',
-          fontSize: 25,
-          fontWeight: 500,
-        }}
-      >
-        {typeof title === 'string' ? <Text>{title}</Text> : title}
+      <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            fontSize: 24,
+            fontWeight: 650,
+            letterSpacing: '-0.02em',
+            color: theme.pageTextDark,
+          }}
+        >
+          {typeof title === 'string' ? <Text>{title}</Text> : title}
+        </View>
+        {subtitle && (
+          <Text style={{ fontSize: 13, color: theme.pageTextLight }}>
+            {subtitle}
+          </Text>
+        )}
       </View>
+      {actions && (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          {actions}
+        </View>
+      )}
     </View>
   );
 }
@@ -86,7 +111,8 @@ export function MobilePageHeader({
           flexDirection: 'row',
           flexBasis: '50%',
           fontSize: 17,
-          fontWeight: 500,
+          fontWeight: 600,
+          letterSpacing: '-0.01em',
           overflowY: 'auto',
           display: 'flex',
           margin: 0,
@@ -154,13 +180,23 @@ export function MobilePageHeaderSlot({ style }: MobilePageHeaderSlotProps) {
 
 type PageProps = {
   header: ReactNode;
+  subtitle?: ReactNode;
+  actions?: ReactNode;
   style?: CSSProperties;
   padding?: number;
   children: ReactNode;
   footer?: ReactNode;
 };
 
-export function Page({ header, style, padding, children, footer }: PageProps) {
+export function Page({
+  header,
+  subtitle,
+  actions,
+  style,
+  padding,
+  children,
+  footer,
+}: PageProps) {
   const { isNarrowWidth } = useResponsive();
   const mobileHeaderSlot = useContext(MobilePageHeaderSlotContext);
   const childrenPadding = padding != null ? padding : isNarrowWidth ? 10 : 20;
@@ -170,7 +206,7 @@ export function Page({ header, style, padding, children, footer }: PageProps) {
       isNarrowWidth ? (
         <MobilePageHeader title={header} />
       ) : (
-        <PageHeader title={header} />
+        <PageHeader title={header} subtitle={subtitle} actions={actions} />
       )
     ) : (
       header

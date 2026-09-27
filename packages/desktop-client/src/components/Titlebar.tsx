@@ -17,6 +17,7 @@ import type { CSSProperties } from '@actual-app/components/styles';
 import { styles } from '@actual-app/components/styles';
 import { Text } from '@actual-app/components/text';
 import { theme } from '@actual-app/components/theme';
+import { radius } from '@actual-app/components/tokens';
 import { Tooltip } from '@actual-app/components/tooltip';
 import { View } from '@actual-app/components/view';
 import { isDevelopmentEnvironment } from '@actual-app/core/shared/environment';
@@ -58,6 +59,10 @@ function UncategorizedButton() {
       to="/categories/uncategorized"
       style={{
         color: theme.errorText,
+        backgroundColor: theme.errorBackground,
+        borderRadius: radius.pill,
+        padding: '4px 10px',
+        fontWeight: 500,
       }}
     >
       <Trans count={count}>{{ count }} uncategorized transactions</Trans>
@@ -150,6 +155,27 @@ function ServerSyncButton({ style, isMobile = false }: ServerSyncButtonProps) {
         ? theme.buttonBareDisabledText
         : theme.buttonBareText;
 
+  const statusDotColor =
+    syncState === 'error'
+      ? theme.errorText
+      : syncState === 'disabled' ||
+          syncState === 'offline' ||
+          syncState === 'local'
+        ? theme.pageTextSubdued
+        : theme.noticeTextLight;
+
+  const desktopLabel = syncing
+    ? t('Syncing…')
+    : syncState === 'error'
+      ? t('Sync error')
+      : syncState === 'offline'
+        ? t('Offline')
+        : syncState === 'local'
+          ? t('Local only')
+          : syncState === 'disabled'
+            ? t('Disabled')
+            : t('Synced');
+
   const activeStyle = isMobile
     ? {
         color: mobileColor,
@@ -223,6 +249,12 @@ function ServerSyncButton({ style, isMobile = false }: ServerSyncButtonProps) {
                 ...style,
                 WebkitAppRegion: 'none',
                 color: desktopColor,
+                gap: 6,
+                padding: '4px 10px',
+                borderRadius: radius.pill,
+                border: `1px solid ${theme.borderSubtle}`,
+                backgroundColor: theme.cardBackground,
+                fontWeight: 500,
               }),
           '&[data-hovered]': hoveredStyle,
           '&[data-pressed]': activeStyle,
@@ -239,12 +271,25 @@ function ServerSyncButton({ style, isMobile = false }: ServerSyncButtonProps) {
           )
         ) : syncState === 'error' ? (
           <SvgAlertTriangle width={13} />
-        ) : (
+        ) : syncing ? (
           <AnimatedRefresh animating={syncing} />
+        ) : (
+          <View
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: radius.pill,
+              backgroundColor: statusDotColor,
+            }}
+          />
         )}
-        <Text style={isMobile ? { ...mobileTextStyle } : null}>
-          {syncState === 'disabled' ? ` ${t('Disabled')}` : null}
-        </Text>
+        {isMobile ? (
+          <Text style={mobileTextStyle}>
+            {syncState === 'disabled' ? ` ${t('Disabled')}` : null}
+          </Text>
+        ) : (
+          <Text>{desktopLabel}</Text>
+        )}
       </Button>
     </Tooltip>
   );
@@ -282,7 +327,7 @@ export function Titlebar({ style }: TitlebarProps) {
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        padding: '0 10px 0 15px',
+        padding: '0 12px 0 20px',
         height: 36,
         pointerEvents: 'none',
         '& *': {
@@ -339,7 +384,7 @@ export function Titlebar({ style }: TitlebarProps) {
         <Route path="/budget" element={<BudgetTitlebar />} />
       </Routes>
       <View style={{ flex: 1 }} />
-      <SpaceBetween gap={10}>
+      <SpaceBetween gap={6}>
         <UncategorizedButton />
         {isDevelopmentEnvironment() && !isTestEnv && <ThemeSelector />}
         <PrivacyButton />
