@@ -45,9 +45,21 @@ export const spacing: Record<SpacingSize, number> = {
   xl: 24,
 };
 
-type RadiusSize = 'sm' | 'pill';
+type RadiusSize = 'xs' | 'sm' | 'md' | 'lg' | 'pill';
 
 export const radius: Record<RadiusSize, number> = {
-  sm: 4,
+  xs: 4,
+  sm: 6,
+  md: 8,
+  lg: 12,
   pill: 999,
+};
+
+type ShadowSize = 'xs' | 'sm' | 'md' | 'lg';
+
+export const shadows: Record<ShadowSize, string> = {
+  xs: '0 1px 2px rgba(16, 24, 40, 0.05)',
+  sm: '0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04)',
+  md: '0 6px 16px -4px rgba(16, 24, 40, 0.1), 0 2px 6px -2px rgba(16, 24, 40, 0.06)',
+  lg: '0 20px 40px -12px rgba(16, 24, 40, 0.22), 0 8px 16px -8px rgba(16, 24, 40, 0.1)',
 };

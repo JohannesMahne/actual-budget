@@ -85,6 +85,78 @@
   --palette-purple800: #580a94;
   --palette-purple900: #44056e;
 
+  --palette-slate25: #fcfcfd;
+  --palette-slate50: #f7f8fa;
+  --palette-slate75: #f2f4f7;
+  --palette-slate100: #eceff3;
+  --palette-slate150: #e4e7ec;
+  --palette-slate200: #d0d5dd;
+  --palette-slate300: #98a2b3;
+  --palette-slate400: #7a8599;
+  --palette-slate500: #667085;
+  --palette-slate600: #475467;
+  --palette-slate700: #344054;
+  --palette-slate750: #283241;
+  --palette-slate800: #1d2939;
+  --palette-slate850: #162030;
+  --palette-slate900: #101828;
+  --palette-slate950: #0b1220;
+
+  --palette-teal50: #effcf9;
+  --palette-teal100: #ccfbef;
+  --palette-teal200: #99f6e0;
+  --palette-teal300: #5eead4;
+  --palette-teal400: #2dd4bf;
+  --palette-teal500: #14b8a6;
+  --palette-teal600: #0d9488;
+  --palette-teal700: #0f766e;
+  --palette-teal800: #115e59;
+  --palette-teal900: #134e4a;
+  --palette-teal950: #042f2e;
+
+  --palette-emerald50: #f0fdf4;
+  --palette-emerald100: #dcfce7;
+  --palette-emerald200: #bbf7d0;
+  --palette-emerald300: #86efac;
+  --palette-emerald400: #4ade80;
+  --palette-emerald500: #22c55e;
+  --palette-emerald600: #16a34a;
+  --palette-emerald700: #15803d;
+  --palette-emerald800: #166534;
+  --palette-emerald900: #14532d;
+
+  --palette-rose50: #fff1f2;
+  --palette-rose100: #ffe4e6;
+  --palette-rose200: #fecdd3;
+  --palette-rose300: #fda4af;
+  --palette-rose400: #fb7185;
+  --palette-rose500: #f43f5e;
+  --palette-rose600: #e11d48;
+  --palette-rose700: #be123c;
+  --palette-rose800: #9f1239;
+  --palette-rose900: #881337;
+
+  --palette-amber50: #fffbeb;
+  --palette-amber100: #fef3c7;
+  --palette-amber200: #fde68a;
+  --palette-amber300: #fcd34d;
+  --palette-amber400: #fbbf24;
+  --palette-amber500: #f59e0b;
+  --palette-amber600: #d97706;
+  --palette-amber700: #b45309;
+  --palette-amber800: #92400e;
+  --palette-amber900: #78350f;
+
+  --palette-indigo100: #e0e7ff;
+  --palette-indigo300: #a5b4fc;
+  --palette-indigo500: #6366f1;
+  --palette-indigo700: #4338ca;
+
+  --palette-sky100: #e0f2fe;
+  --palette-sky300: #7dd3fc;
+  --palette-sky500: #0ea5e9;
+  --palette-sky700: #0369a1;
+
   --palette-white: #ffffff;
   --palette-black: #000000;
   --palette-hover: #fafafa;

@@ -13,6 +13,12 @@ export const theme = {
   pageTextPositive: 'var(--color-pageTextPositive)',
   pageTextLink: 'var(--color-pageTextLink)',
   pageTextLinkLight: 'var(--color-pageTextLinkLight)',
+  // Fallbacks keep Midnight and older custom themes working without these tokens.
+  surfaceSubtle: 'var(--color-surfaceSubtle, var(--color-tableRowHeaderBackground))',
+  borderSubtle: 'var(--color-borderSubtle, var(--color-tableBorder))',
+  focusRing: 'var(--color-focusRing, var(--color-formInputShadowSelected))',
+  accent: 'var(--color-accent, var(--color-pageTextPositive))',
+  accentSubtle: 'var(--color-accentSubtle, var(--color-tableRowBackgroundHighlight))',
   numberPositive: 'var(--color-numberPositive)',
   numberNegative: 'var(--color-numberNegative)',
   numberNeutral: 'var(--color-numberNeutral)',
