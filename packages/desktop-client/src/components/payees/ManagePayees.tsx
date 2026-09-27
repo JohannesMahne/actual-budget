@@ -6,7 +6,6 @@ import { Button } from '@actual-app/components/button';
 import { SvgExpandArrow, SvgSubtract } from '@actual-app/components/icons/v0';
 import { Popover } from '@actual-app/components/popover';
 import { styles } from '@actual-app/components/styles';
-import { theme } from '@actual-app/components/theme';
 import { View } from '@actual-app/components/view';
 import { memoizeOne } from '@actual-app/core/shared/memoize';
 import { getNormalisedString } from '@actual-app/core/shared/normalisation';

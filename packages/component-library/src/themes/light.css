@@ -16,7 +16,11 @@
 
   --color-surfaceSubtle: var(--palette-slate75);
   --color-borderSubtle: var(--palette-slate150);
-  --color-focusRing: color-mix(in srgb, var(--palette-teal500) 45%, transparent);
+  --color-focusRing: color-mix(
+    in srgb,
+    var(--palette-teal500) 45%,
+    transparent
+  );
   --color-accent: var(--palette-teal700);
   --color-accentSubtle: var(--palette-teal50);
 

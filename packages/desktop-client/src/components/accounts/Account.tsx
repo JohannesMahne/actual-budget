@@ -13,7 +13,6 @@ import { Navigate, useLocation, useParams } from 'react-router';
 import { Button } from '@actual-app/components/button';
 import { SvgSearch1 } from '@actual-app/components/icons/v2';
 import { styles } from '@actual-app/components/styles';
-import { theme } from '@actual-app/components/theme';
 import { View } from '@actual-app/components/view';
 import { listen, send } from '@actual-app/core/platform/client/connection';
 import * as undo from '@actual-app/core/platform/client/undo';

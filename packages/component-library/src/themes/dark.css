@@ -16,9 +16,17 @@
 
   --color-surfaceSubtle: var(--palette-slate850);
   --color-borderSubtle: var(--palette-slate800);
-  --color-focusRing: color-mix(in srgb, var(--palette-teal400) 50%, transparent);
+  --color-focusRing: color-mix(
+    in srgb,
+    var(--palette-teal400) 50%,
+    transparent
+  );
   --color-accent: var(--palette-teal400);
-  --color-accentSubtle: color-mix(in srgb, var(--palette-teal400) 14%, transparent);
+  --color-accentSubtle: color-mix(
+    in srgb,
+    var(--palette-teal400) 14%,
+    transparent
+  );
 
   --color-cardBackground: var(--palette-slate900);
   --color-cardBorder: var(--palette-slate800);
@@ -180,26 +188,46 @@
   --color-buttonBareBackgroundHover: rgba(255, 255, 255, 0.07);
   --color-buttonBareBackgroundActive: rgba(255, 255, 255, 0.12);
 
-  --color-noticeBackground: color-mix(in srgb, var(--palette-emerald500) 18%, var(--palette-slate900));
-  --color-noticeBackgroundLight: color-mix(in srgb, var(--palette-emerald500) 10%, var(--palette-slate900));
+  --color-noticeBackground: color-mix(
+    in srgb,
+    var(--palette-emerald500) 18%,
+    var(--palette-slate900)
+  );
+  --color-noticeBackgroundLight: color-mix(
+    in srgb,
+    var(--palette-emerald500) 10%,
+    var(--palette-slate900)
+  );
   --color-noticeBackgroundDark: var(--palette-emerald500);
   --color-noticeText: var(--palette-emerald300);
   --color-noticeTextLight: var(--palette-emerald500);
   --color-noticeTextDark: var(--palette-emerald100);
   --color-noticeTextMenu: var(--palette-emerald500);
   --color-noticeBorder: var(--palette-emerald800);
-  --color-warningBackground: color-mix(in srgb, var(--palette-amber500) 18%, var(--palette-slate900));
+  --color-warningBackground: color-mix(
+    in srgb,
+    var(--palette-amber500) 18%,
+    var(--palette-slate900)
+  );
   --color-warningText: var(--palette-amber300);
   --color-warningTextLight: var(--palette-amber500);
   --color-warningTextDark: var(--palette-amber100);
   --color-warningBorder: var(--palette-amber700);
-  --color-errorBackground: color-mix(in srgb, var(--palette-rose500) 18%, var(--palette-slate900));
+  --color-errorBackground: color-mix(
+    in srgb,
+    var(--palette-rose500) 18%,
+    var(--palette-slate900)
+  );
   --color-errorText: var(--palette-rose300);
   --color-errorTextDark: var(--palette-rose200);
   --color-errorTextDarker: var(--color-errorTextDark);
   --color-errorTextMenu: var(--palette-rose300);
   --color-errorBorder: var(--palette-rose700);
-  --color-upcomingBackground: color-mix(in srgb, var(--palette-indigo500) 22%, var(--palette-slate900));
+  --color-upcomingBackground: color-mix(
+    in srgb,
+    var(--palette-indigo500) 22%,
+    var(--palette-slate900)
+  );
   --color-upcomingText: var(--palette-indigo100);
   --color-upcomingBorder: var(--color-tableBorder);
 
