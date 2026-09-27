@@ -250,6 +250,9 @@ export function ExperimentalFeatures() {
             >
               <Trans>Akahu Bank Sync (NZ banks)</Trans>
             </FeatureToggle>
+            <FeatureToggle flag="investecBankSync">
+              <Trans>Investec Programmable Banking sync (SA banks)</Trans>
+            </FeatureToggle>
             {showServerPrefs && (
               <ServerFeatureToggle
                 prefName="flags.plugins"

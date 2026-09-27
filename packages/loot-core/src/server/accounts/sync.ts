@@ -355,6 +355,45 @@ async function downloadAkahuTransactions(
   return retVal;
 }
 
+async function downloadInvestecTransactions(
+  acctId: AccountEntity['id'],
+  since: string,
+) {
+  const userToken = await asyncStorage.getItem('user-token');
+  if (!userToken) return;
+
+  logger.log('Pulling transactions from Investec');
+
+  const res = await post(
+    getServer().INVESTEC_SERVER + '/transactions',
+    {
+      accountId: acctId,
+      startDate: since,
+    },
+    {
+      'X-ACTUAL-TOKEN': userToken,
+    },
+    60000,
+  );
+
+  if (res.error_code) {
+    throw BankSyncError(res.error_type, res.error_code);
+  } else if ('error' in res) {
+    throw BankSyncError('Connection', res.error);
+  }
+
+  let retVal = {};
+  const singleRes = res as BankSyncResponse;
+  retVal = {
+    transactions: singleRes.transactions.all,
+    accountBalance: singleRes.balances,
+    startingBalance: singleRes.startingBalance,
+  };
+
+  logger.log('Response:', retVal);
+  return retVal;
+}
+
 async function downloadEnableBankingTransactions(
   acctId: string,
   since: string,
@@ -1137,6 +1176,16 @@ async function processBankSyncDownload(
         currentBalance,
       );
       balanceToUse = Math.round(previousBalance);
+    } else if (acctRow.account_sync_source === 'investec') {
+      // Investec's current balance excludes pending transactions.
+      const previousBalance = transactions
+        .filter(trans => Boolean(trans.booked))
+        .reduce(
+          (total, trans) =>
+            total - amountToInteger(trans.transactionAmount.amount),
+          currentBalance,
+        );
+      balanceToUse = Math.round(previousBalance);
     }
 
     const oldestTransaction = transactions[transactions.length - 1];
@@ -1228,6 +1277,8 @@ export async function syncAccount(
     );
   } else if (acctRow.account_sync_source === 'akahu') {
     download = await downloadAkahuTransactions(acctId, syncStartDate);
+  } else if (acctRow.account_sync_source === 'investec') {
+    download = await downloadInvestecTransactions(acctId, syncStartDate);
   } else if (acctRow.account_sync_source === 'goCardless') {
     download = await downloadGoCardlessTransactions(
       userId,

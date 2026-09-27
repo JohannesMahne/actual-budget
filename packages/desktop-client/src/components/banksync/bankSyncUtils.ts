@@ -1,6 +1,7 @@
 import type {
   AccountEntity,
   BankSyncProviders,
+  SyncServerInvestecAccount,
 } from '@actual-app/core/types/models';
 
 export type SyncProviders = BankSyncProviders | 'unlinked';
@@ -18,6 +19,7 @@ const SYNC_PROVIDER_KEYS = [
   ...BUILT_IN_BANK_SYNC_PROVIDERS,
   'enableBanking',
   'akahu',
+  'investec',
   'unlinked',
 ] as const satisfies readonly SyncProviders[];
 
@@ -36,6 +38,7 @@ export function getSyncSourceReadable(
     pluggyai: 'Pluggy.ai',
     enableBanking: 'Enable Banking',
     akahu: 'Akahu',
+    investec: 'Investec',
     unlinked: translate('Unlinked'),
   };
 }
@@ -86,4 +89,38 @@ export function getGroupedBankSyncEntries(
     (entry): entry is [SyncProviders, AccountEntity[]] =>
       isSyncProvider(entry[0]) && entry[1] != null,
   );
+}
+
+export type InvestecApiAccount = {
+  accountId: string;
+  accountNumber?: string;
+  accountName?: string;
+  referenceName?: string;
+  productName?: string;
+  profileName?: string;
+  balance?: number | null;
+};
+
+export function toInvestecExternalAccount(
+  account: InvestecApiAccount,
+): SyncServerInvestecAccount {
+  const holder = account.referenceName || account.accountName || '';
+  const lastDigits = account.accountNumber?.slice(-4);
+  const product = account.productName || 'Investec account';
+  const name = [
+    product,
+    holder && `– ${holder}`,
+    lastDigits && `(…${lastDigits})`,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  return {
+    account_id: account.accountId,
+    name,
+    institution: 'Investec',
+    orgDomain: 'investec.com',
+    orgId: 'investec',
+    balance: account.balance ?? null,
+  };
 }

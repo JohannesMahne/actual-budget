@@ -16,6 +16,7 @@ import {
   addTransactions,
   reconcileTransactions,
   simpleFinBatchSync,
+  syncAccount,
 } from './sync';
 
 vi.mock('#shared/months', async () => ({
@@ -946,5 +947,70 @@ describe('SimpleFin batch sync', () => {
     expect(missingResult).toBeDefined();
     expect(missingResult.res.error_code).toBe('ACCOUNT_MISSING');
     expect(missingResult.res.error_type).toBe('ACCOUNT_MISSING');
+  });
+});
+
+describe('Investec sync', () => {
+  afterEach(() => {
+    delete handlers['/investec/transactions'];
+  });
+
+  test('initial sync derives the starting balance from booked transactions only', async () => {
+    vi.mocked(asyncStorage.getItem).mockResolvedValue('test-token');
+    handlers['/investec/transactions'] = () => ({
+      balances: [],
+      startingBalance: 100000,
+      transactions: {
+        all: [
+          {
+            booked: false,
+            date: '2017-10-14',
+            payeeName: 'UBER TRIP',
+            notes: 'UBER TRIP',
+            transactionAmount: { amount: -50, currency: 'ZAR' },
+          },
+          {
+            booked: true,
+            date: '2017-10-10',
+            payeeName: 'WOOLWORTHS',
+            notes: 'WOOLWORTHS',
+            transactionId: 'inv-tx-2',
+            transactionAmount: { amount: -200, currency: 'ZAR' },
+          },
+          {
+            booked: true,
+            date: '2017-10-01',
+            payeeName: 'ACME SALARY',
+            notes: 'ACME SALARY',
+            transactionId: 'inv-tx-1',
+            transactionAmount: { amount: 500, currency: 'ZAR' },
+          },
+        ],
+        booked: [],
+        pending: [],
+      },
+    });
+
+    const id = await db.insertAccount({
+      id: 'investec-1',
+      account_id: 'inv-account-1',
+      name: 'Private Bank Account',
+      account_sync_source: 'investec',
+    });
+    await db.insertPayee({ id: 'transfer-' + id, name: '', transfer_acct: id });
+
+    await syncAccount(undefined, undefined, id, 'inv-account-1', 'investec');
+
+    const transactions = await getAllTransactions();
+    const startingBalance = transactions.find(t => t.starting_balance_flag);
+    expect(startingBalance.amount).toBe(70000);
+    expect(startingBalance.date).toBe(20171001);
+
+    const imported = transactions.filter(t => !t.starting_balance_flag);
+    expect(imported.map(t => [t.amount, Boolean(t.cleared)])).toEqual([
+      [-5000, false],
+      [-20000, true],
+      [50000, true],
+    ]);
   });
 });

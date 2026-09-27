@@ -16,6 +16,7 @@ import { useCurrentAccess } from '#hooks/useCurrentAccess';
 import { useEnableBankingStatus } from '#hooks/useEnableBankingStatus';
 import { useFeatureFlag } from '#hooks/useFeatureFlag';
 import { useGoCardlessStatus } from '#hooks/useGoCardlessStatus';
+import { useInvestecStatus } from '#hooks/useInvestecStatus';
 import { usePluggyAiStatus } from '#hooks/usePluggyAiStatus';
 import { useSimpleFinStatus } from '#hooks/useSimpleFinStatus';
 import { useSyncServerStatus } from '#hooks/useSyncServerStatus';
@@ -23,7 +24,10 @@ import { pushModal } from '#modals/modalsSlice';
 import { addNotification } from '#notifications/notificationsSlice';
 import { useDispatch } from '#redux';
 
-import { BUILT_IN_BANK_SYNC_PROVIDERS } from './bankSyncUtils';
+import {
+  BUILT_IN_BANK_SYNC_PROVIDERS,
+  toInvestecExternalAccount,
+} from './bankSyncUtils';
 
 type ProviderAction = () => void | Promise<void>;
 
@@ -127,13 +131,19 @@ export function useBuiltInBankSyncProviders({
   const [loadingSimpleFinAccounts, setLoadingSimpleFinAccounts] =
     useState(false);
   const [loadingAkahuAccounts, setLoadingAkahuAccounts] = useState(false);
+  const [isInvestecSetupComplete, setIsInvestecSetupComplete] = useState<
+    boolean | null
+  >(null);
+  const [loadingInvestecAccounts, setLoadingInvestecAccounts] = useState(false);
 
   const enableBankingEnabled = useFeatureFlag('enableBanking');
   const akahuEnabled = useFeatureFlag('akahuBankSync');
+  const investecEnabled = useFeatureFlag('investecBankSync');
   const { configuredGoCardless } = useGoCardlessStatus();
   const { configuredSimpleFin } = useSimpleFinStatus();
   const { pluggyAiStatus, setPluggyAiStatus } = usePluggyAiStatus();
   const { configuredAkahu } = useAkahuStatus(akahuEnabled);
+  const { configuredInvestec } = useInvestecStatus(investecEnabled);
   const { configuredEnableBanking, isLoading: isEnableBankingLoading } =
     useEnableBankingStatus(enableBankingEnabled);
 
@@ -152,6 +162,10 @@ export function useBuiltInBankSyncProviders({
   useEffect(() => {
     setIsAkahuSetupComplete(configuredAkahu);
   }, [configuredAkahu]);
+
+  useEffect(() => {
+    setIsInvestecSetupComplete(configuredInvestec);
+  }, [configuredInvestec]);
 
   const onGoCardlessInit = useCallback(() => {
     dispatch(
@@ -218,6 +232,19 @@ export function useBuiltInBankSyncProviders({
           name: 'akahu-init',
           options: {
             onSuccess: () => setIsAkahuSetupComplete(true),
+          },
+        },
+      }),
+    );
+  }, [dispatch]);
+
+  const onInvestecInit = useCallback(() => {
+    dispatch(
+      pushModal({
+        modal: {
+          name: 'investec-init',
+          options: {
+            onSuccess: () => setIsInvestecSetupComplete(true),
           },
         },
       }),
@@ -372,6 +399,24 @@ export function useBuiltInBankSyncProviders({
     } catch (error) {
       console.log(error);
       notifyResetFailure('Akahu', error);
+    }
+  }, [notifyResetFailure]);
+
+  const onInvestecReset = useCallback(async () => {
+    try {
+      for (const name of [
+        'investec_clientId',
+        'investec_clientSecret',
+        'investec_apiKey',
+      ]) {
+        await ensureSuccessResponse(
+          await send('secret-set', { name, value: null }),
+          'Failed to clear Investec credentials',
+        );
+      }
+      setIsInvestecSetupComplete(false);
+    } catch (error) {
+      notifyResetFailure('Investec', error);
     }
   }, [notifyResetFailure]);
 
@@ -635,12 +680,72 @@ export function useBuiltInBankSyncProviders({
     t,
   ]);
 
+  const onConnectInvestec = useCallback(async () => {
+    if (!isInvestecSetupComplete) {
+      onInvestecInit();
+      return;
+    }
+
+    if (loadingInvestecAccounts) {
+      return;
+    }
+
+    setLoadingInvestecAccounts(true);
+
+    try {
+      const results = await send('investec-accounts');
+      if (results.error_code) {
+        throw new Error(results.reason || results.error_code);
+      }
+      if ('error' in results && results.error) {
+        throw new Error(results.reason || results.error);
+      }
+
+      dispatch(
+        pushModal({
+          modal: {
+            name: 'select-linked-accounts',
+            options: {
+              externalAccounts: (results.accounts ?? []).map(
+                toInvestecExternalAccount,
+              ),
+              syncSource: 'investec',
+              upgradingAccountId,
+            },
+          },
+        }),
+      );
+    } catch (error) {
+      dispatch(
+        addNotification({
+          notification: {
+            type: 'error',
+            title: t('Error when trying to contact Investec'),
+            message: error instanceof Error ? error.message : String(error),
+            timeout: 5000,
+          },
+        }),
+      );
+      onInvestecInit();
+    } finally {
+      setLoadingInvestecAccounts(false);
+    }
+  }, [
+    dispatch,
+    isInvestecSetupComplete,
+    loadingInvestecAccounts,
+    onInvestecInit,
+    upgradingAccountId,
+    t,
+  ]);
+
   const configuredProviders = {
     goCardless: Boolean(isGoCardlessSetupComplete),
     simpleFin: Boolean(isSimpleFinSetupComplete),
     pluggyai: Boolean(pluggyAiStatus.configured),
     enableBanking: Boolean(isEnableBankingSetupComplete),
     akahu: Boolean(isAkahuSetupComplete),
+    investec: Boolean(isInvestecSetupComplete),
   } satisfies Record<BankSyncProviders, boolean>;
 
   const providers = useMemo<BuiltInBankSyncProviderState[]>(() => {
@@ -717,6 +822,24 @@ export function useBuiltInBankSyncProviders({
       });
     }
 
+    if (investecEnabled) {
+      baseProviders.push({
+        id: 'investec',
+        displayName: 'Investec',
+        description: t(
+          'Link an Investec Private Bank account (South Africa) via Programmable Banking to automatically download transactions.',
+        ),
+        isConfigured: configuredProviders.investec,
+        credentialSource: 'global',
+        supportsPerBudgetFile: false,
+        canConfigure: canConfigureProviders,
+        isLoading: loadingInvestecAccounts,
+        onConfigure: onInvestecInit,
+        onLink: onConnectInvestec,
+        onReset: onInvestecReset,
+      });
+    }
+
     if (enableBankingEnabled) {
       baseProviders.push({
         id: 'enableBanking',
@@ -745,20 +868,26 @@ export function useBuiltInBankSyncProviders({
     configuredProviders.pluggyai,
     configuredProviders.simpleFin,
     configuredProviders.akahu,
+    configuredProviders.investec,
     pluggyAiStatus,
     syncServerStatus,
     enableBankingEnabled,
     akahuEnabled,
+    investecEnabled,
     isEnableBankingLoading,
     loadingSimpleFinAccounts,
     loadingAkahuAccounts,
+    loadingInvestecAccounts,
     onConnectAkahu,
+    onConnectInvestec,
     onConnectEnableBanking,
     onConnectGoCardless,
     onConnectPluggyAi,
     onConnectSimpleFin,
     onAkahuInit,
     onAkahuReset,
+    onInvestecInit,
+    onInvestecReset,
     onEnableBankingInit,
     onEnableBankingReset,
     onGoCardlessInit,

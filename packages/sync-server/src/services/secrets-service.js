@@ -17,6 +17,9 @@ export const SecretName = {
   pluggyai_itemIds: 'pluggyai_itemIds',
   akahu_userToken: 'akahu_userToken',
   akahu_appToken: 'akahu_appToken',
+  investec_clientId: 'investec_clientId',
+  investec_clientSecret: 'investec_clientSecret',
+  investec_apiKey: 'investec_apiKey',
   enablebanking_applicationId: 'enablebanking_applicationId',
   enablebanking_secretKey: 'enablebanking_secretKey',
 };
