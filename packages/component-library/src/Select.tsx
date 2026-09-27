@@ -6,6 +6,7 @@ import { SvgExpandArrow } from './icons/v0';
 import { Menu } from './Menu';
 import type { MenuItem } from './Menu';
 import { Popover } from './Popover';
+import { theme } from './theme';
 import { View } from './View';
 
 /** A non-selectable heading above the options that follow it */
@@ -148,7 +149,7 @@ export function Select<const Value = string>({
           })}
           getItemStyle={option => {
             if (targetOption && targetOption[0] === option.name) {
-              return { fontWeight: 'bold' };
+              return { fontWeight: 600, color: theme.menuItemTextSelected };
             }
             return {};
           }}

@@ -24,7 +24,7 @@ import { styles } from '@actual-app/components/styles';
 import { Text } from '@actual-app/components/text';
 import { TextOneLine } from '@actual-app/components/text-one-line';
 import { theme } from '@actual-app/components/theme';
-import { tokens } from '@actual-app/components/tokens';
+import { radius, shadows, tokens } from '@actual-app/components/tokens';
 import { View } from '@actual-app/components/view';
 import { css } from '@emotion/css';
 import { AutoTextSize } from 'auto-text-size';
@@ -89,13 +89,10 @@ export const Modal = ({
           zIndex: MODAL_Z_INDEX,
           fontSize: 14,
           // on mobile, we disable the blurred background for performance reasons
-          ...(isNarrowWidth
-            ? {
-                backgroundColor: 'rgba(0, 0, 0, 0.4)',
-              }
-            : {
-                backdropFilter: 'blur(1px) brightness(0.9)',
-              }),
+          backgroundColor: theme.overlayBackground,
+          ...(!isNarrowWidth && {
+            backdropFilter: 'blur(3px)',
+          }),
           ...style,
         }}
         {...props}
@@ -126,14 +123,14 @@ export const Modal = ({
                   {...containerProps}
                   style={{
                     flex: 1,
-                    padding: 10,
+                    padding: 16,
                     willChange: 'opacity, transform',
                     maxWidth: '90vw',
                     minWidth: '90vw',
                     maxHeight: 'calc(var(--visual-viewport-height) * 0.9)',
                     minHeight: 0,
-                    borderRadius: 6,
-                    //border: '1px solid ' + theme.modalBorder,
+                    borderRadius: radius.lg,
+                    border: '1px solid ' + theme.modalBorder,
                     color: theme.pageText,
                     backgroundColor: theme.modalBackground,
                     opacity: isHidden ? 0 : 1,
@@ -141,7 +138,7 @@ export const Modal = ({
                       minWidth: tokens.breakpoint_small,
                     },
                     overflowY: 'auto',
-                    ...styles.shadowLarge,
+                    boxShadow: shadows.lg,
                     ...containerProps?.style,
                   }}
                 >
@@ -197,8 +194,6 @@ const ModalContentContainer = ({
 }: ModalContentContainerProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const mounted = useRef(false);
-  const rotateFactor = useRef(Math.random() * 10 - 5);
-
   useLayoutEffect(() => {
     if (!contentRef.current) {
       return;
@@ -214,7 +209,7 @@ const ModalContentContainer = ({
         contentRef.current.style.willChange = 'auto';
         contentRef.current.style.pointerEvents = 'auto';
       } else {
-        contentRef.current.style.transform = `translateY(-40px) scale(.95) rotate(${rotateFactor.current}deg)`;
+        contentRef.current.style.transform = 'translateY(-24px) scale(.96)';
         contentRef.current.style.pointerEvents = 'none';
       }
     }
@@ -227,7 +222,7 @@ const ModalContentContainer = ({
         setTimeout(() => {
           if (contentRef.current) {
             contentRef.current.style.transition =
-              'opacity .1s, transform .1s cubic-bezier(.42, 0, .58, 1)';
+              'opacity .15s, transform .15s cubic-bezier(.2, 0, 0, 1)';
           }
         }, 0);
       } else {
@@ -238,7 +233,7 @@ const ModalContentContainer = ({
           if (contentRef.current) {
             mounted.current = true;
             contentRef.current.style.transition =
-              'opacity .1s, transform .1s cubic-bezier(.42, 0, .58, 1)';
+              'opacity .15s, transform .15s cubic-bezier(.2, 0, 0, 1)';
             contentRef.current.style.opacity = '1';
             setProps();
           }
@@ -294,7 +289,9 @@ export const ModalButtons = ({
       innerRef={containerRef}
       style={{
         flexDirection: 'row',
-        marginTop: 30,
+        alignItems: 'center',
+        gap: 8,
+        marginTop: 24,
         ...style,
       }}
     >
@@ -325,7 +322,7 @@ export function ModalHeader({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        height: 60,
+        height: 56,
         flex: 'none',
         display: 'flex',
         margin: 0,
@@ -427,8 +424,8 @@ export function ModalTitle({
     <Input
       ref={inputRef}
       style={{
-        fontSize: 25,
-        fontWeight: 700,
+        fontSize: 20,
+        fontWeight: 650,
         textAlign: 'center',
         ...style,
       }}
@@ -451,11 +448,12 @@ export function ModalTitle({
         <AutoTextSize
           as={Text}
           minFontSizePx={15}
-          maxFontSizePx={25}
+          maxFontSizePx={20}
           onClick={onTitleClick}
           style={{
-            fontSize: 25,
-            fontWeight: 700,
+            fontSize: 20,
+            fontWeight: 650,
+            letterSpacing: '-0.01em',
             textAlign: 'center',
             ...(isEditable && styles.underlinedText),
             ...style,
@@ -467,8 +465,9 @@ export function ModalTitle({
         <TextOneLine
           onClick={onTitleClick}
           style={{
-            fontSize: 25,
-            fontWeight: 700,
+            fontSize: 20,
+            fontWeight: 650,
+            letterSpacing: '-0.01em',
             textAlign: 'center',
             ...(isEditable && styles.underlinedText),
             ...style,
@@ -492,7 +491,7 @@ export function ModalCloseButton({ onPress, style }: ModalCloseButtonProps) {
     <Button
       variant="bare"
       onPress={onPress}
-      style={{ padding: '10px 10px' }}
+      style={{ width: 32, height: 32, padding: 0 }}
       aria-label={t('Close')}
     >
       <SvgDelete width={10} style={style} />

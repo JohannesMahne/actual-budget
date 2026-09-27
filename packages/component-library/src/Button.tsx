@@ -7,6 +7,7 @@ import { css, cx } from '@emotion/css';
 import { AnimatedLoading } from './icons/AnimatedLoading';
 import { styles } from './styles';
 import { theme } from './theme';
+import { radius, shadows } from './tokens';
 import { View } from './View';
 
 const backgroundColor: {
@@ -92,12 +93,12 @@ const _getPadding = (variant: ButtonVariant): string => {
     case 'bare':
       return '5px';
     default:
-      return '5px 10px';
+      return '6px 12px';
   }
 };
 
 const _getHoveredStyles = (variant: ButtonVariant): CSSProperties => ({
-  ...(variant !== 'bare' && styles.shadow),
+  ...(variant !== 'bare' && { boxShadow: shadows.sm }),
   backgroundColor: backgroundColorHover[variant],
   color: textColorHover[variant],
   cursor: 'pointer',
@@ -113,7 +114,7 @@ const _getActiveStyles = (
     default:
       return {
         transform: bounce ? 'translateY(1px)' : undefined,
-        boxShadow: `0 1px 4px 0 ${
+        boxShadow: `inset 0 1px 2px 0 ${
           variant === 'primary'
             ? theme.buttonPrimaryShadow
             : theme.buttonNormalShadow
@@ -148,15 +149,27 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           margin: 0,
           overflow: 'hidden',
           display: 'flex',
-          borderRadius: 4,
+          gap: 4,
+          borderRadius: variant === 'bare' ? radius.sm : radius.md,
           backgroundColor: backgroundColor[variantWithDisabled],
           border: _getBorder(variant, variantWithDisabled),
           color: textColor[variantWithDisabled],
-          transition: 'box-shadow .25s',
+          boxShadow:
+            variant === 'normal' || variant === 'primary'
+              ? shadows.xs
+              : undefined,
+          transition:
+            'box-shadow .15s ease, background-color .15s ease, color .15s ease',
           WebkitAppRegion: 'no-drag',
           ...styles.smallText,
+          fontWeight: variant === 'bare' ? undefined : 500,
           '&[data-hovered]': _getHoveredStyles(variant),
           '&[data-pressed]': _getActiveStyles(variant, bounce),
+          '&[data-focus-visible]': {
+            outline: 'none',
+            boxShadow: `0 0 0 3px ${theme.focusRing}`,
+          },
+          '&[data-disabled]': { cursor: 'not-allowed' },
         }),
       [bounce, variant, variantWithDisabled],
     );

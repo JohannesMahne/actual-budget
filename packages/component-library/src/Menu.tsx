@@ -12,6 +12,7 @@ import { Button } from './Button';
 import { Text } from './Text';
 import { theme } from './theme';
 import { Toggle } from './Toggle';
+import { radius } from './tokens';
 import { View } from './View';
 
 const MenuLine: unique symbol = Symbol('menu-line');
@@ -160,7 +161,13 @@ export function Menu<const NameType = string>({
     <View
       role="menu"
       className={className}
-      style={{ outline: 'none', borderRadius: 4, overflow: 'hidden', ...style }}
+      style={{
+        outline: 'none',
+        borderRadius: radius.md,
+        overflow: 'hidden',
+        padding: 4,
+        ...style,
+      }}
       tabIndex={0}
       onKeyDown={onKeyDown}
       innerRef={elRef}
@@ -169,7 +176,7 @@ export function Menu<const NameType = string>({
       {items.map((item, idx) => {
         if (item === Menu.line) {
           return (
-            <View key={idx} style={{ margin: '3px 0px' }}>
+            <View key={idx} style={{ margin: '4px -4px' }}>
               <View style={{ borderTop: '1px solid ' + theme.menuBorder }} />
             </View>
           );
@@ -180,10 +187,11 @@ export function Menu<const NameType = string>({
               style={{
                 color: theme.menuItemTextHeader,
                 fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: '0.04em',
                 lineHeight: '1em',
                 textTransform: 'uppercase',
-                margin: '3px 9px',
-                marginTop: 5,
+                margin: '6px 10px 4px',
               }}
             >
               {item.name}
@@ -201,7 +209,8 @@ export function Menu<const NameType = string>({
             slot={slot}
             style={{
               cursor: 'default',
-              padding: 10,
+              padding: '8px 10px',
+              borderRadius: radius.sm,
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',

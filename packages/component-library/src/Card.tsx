@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import type { ComponentProps } from 'react';
 
 import { theme } from './theme';
+import { radius, shadows } from './tokens';
 import { View } from './View';
 
 type CardProps = ComponentProps<typeof View>;
@@ -16,16 +17,16 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           marginTop: 15,
           marginLeft: 5,
           marginRight: 5,
-          borderRadius: 6,
+          borderRadius: radius.lg,
           backgroundColor: theme.cardBackground,
-          borderColor: theme.cardBorder,
-          boxShadow: '0 1px 2px #9594A8',
+          border: `1px solid ${theme.cardBorder}`,
+          boxShadow: shadows.xs,
           ...props.style,
         }}
       >
         <View
           style={{
-            borderRadius: 6,
+            borderRadius: radius.lg - 1,
             overflow: 'hidden',
           }}
         >

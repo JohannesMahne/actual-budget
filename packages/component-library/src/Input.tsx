@@ -12,14 +12,15 @@ import { css, cx } from '@emotion/css';
 import { useResponsive } from './hooks/useResponsive';
 import { styles } from './styles';
 import { theme } from './theme';
+import { radius, shadows } from './tokens';
 
 export const baseInputStyle = {
   outline: 0,
   backgroundColor: theme.tableBackground,
   color: theme.formInputText,
   margin: 0,
-  padding: 5,
-  borderRadius: 4,
+  padding: '6px 8px',
+  borderRadius: radius.md,
   border: '1px solid ' + theme.formInputBorder,
 };
 
@@ -29,12 +30,18 @@ export const defaultInputClassName = css({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   flexShrink: 0,
+  transition: 'border-color .15s ease, box-shadow .15s ease',
+  '&[data-hovered]:not([data-focused]):not([data-disabled])': {
+    borderColor: theme.tableBorderSeparator,
+  },
   '&[data-focused]': {
     border: '1px solid ' + theme.formInputBorderSelected,
-    boxShadow: '0 1px 1px ' + theme.formInputShadowSelected,
+    boxShadow: '0 0 0 3px ' + theme.focusRing,
   },
   '&[data-disabled]': {
     color: theme.formInputTextPlaceholder,
+    backgroundColor: theme.surfaceSubtle,
+    cursor: 'not-allowed',
   },
   '::placeholder': { color: theme.formInputTextPlaceholder },
   ...styles.smallText,
@@ -92,11 +99,11 @@ export function Input({
 }
 
 const defaultBigInputClassName = css({
-  padding: 10,
-  fontSize: 15,
-  border: 'none',
-  ...styles.shadow,
-  '&[data-focused]': { border: 'none', ...styles.shadow },
+  padding: '11px 12px',
+  fontSize: 16,
+  borderRadius: radius.lg,
+  border: '1px solid ' + theme.formInputBorder,
+  boxShadow: shadows.xs,
 });
 
 export function BigInput({ className, ...props }: InputProps) {

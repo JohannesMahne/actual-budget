@@ -34,9 +34,15 @@ export const Toggle = ({
         disabled={isDisabled}
         onChange={e => onToggle?.(e.target.checked)}
         className={css({
-          height: 0,
-          width: 0,
-          visibility: 'hidden',
+          position: 'absolute',
+          opacity: 0,
+          width: 1,
+          height: 1,
+          margin: 0,
+          pointerEvents: 'none',
+          '&:focus-visible + label': {
+            boxShadow: `0 0 0 3px ${theme.focusRing}`,
+          },
         })}
         type="checkbox"
       />
@@ -49,9 +55,9 @@ export const Toggle = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            cursor: 'pointer',
-            width: '32px',
-            height: '16px',
+            cursor: isDisabled ? 'not-allowed' : 'pointer',
+            width: '34px',
+            height: '20px',
             borderRadius: '100px',
             position: 'relative',
             transition: 'background-color .2s',
@@ -71,11 +77,11 @@ export const Toggle = ({
               position: 'absolute',
               top: '2px',
               left: '2px',
-              width: '12px',
-              height: '12px',
+              width: '16px',
+              height: '16px',
               borderRadius: '100px',
               transition: '0.2s',
-              boxShadow: '0 0 2px 0 rgba(10, 10, 10, 0.29)',
+              boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.2)',
               backgroundColor: isDisabled
                 ? theme.checkboxToggleDisabled
                 : '#fff',

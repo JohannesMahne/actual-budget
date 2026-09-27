@@ -38,7 +38,7 @@ export const Popover = ({
       data-popover
       ref={ref}
       placement="bottom end"
-      offset={1}
+      offset={4}
       className={css({
         ...styles.tooltip,
         ...styles.lightScrollbar,
