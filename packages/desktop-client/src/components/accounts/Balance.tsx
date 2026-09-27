@@ -38,10 +38,11 @@ function DetailedBalance({
   return (
     <Text
       style={{
-        borderRadius: 4,
-        padding: '4px 6px',
+        borderRadius: 999,
+        padding: '4px 10px',
         color: theme.pillText,
-        backgroundColor: theme.pillBackground,
+        backgroundColor: theme.cardBackground,
+        border: '1px solid ' + theme.borderSubtle,
       }}
     >
       {name}{' '}
@@ -230,8 +231,9 @@ export function Balances({
             <CellValueText
               {...props}
               style={{
-                fontSize: 22,
-                fontWeight: 400,
+                fontSize: 20,
+                fontWeight: 600,
+                letterSpacing: '-0.01em',
                 color:
                   props.value < 0
                     ? theme.numberNegative

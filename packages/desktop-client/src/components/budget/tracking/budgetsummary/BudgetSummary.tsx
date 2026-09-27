@@ -12,6 +12,7 @@ import { Popover } from '@actual-app/components/popover';
 import { SpaceBetween } from '@actual-app/components/space-between';
 import { styles } from '@actual-app/components/styles';
 import { theme } from '@actual-app/components/theme';
+import { radius } from '@actual-app/components/tokens';
 import { View } from '@actual-app/components/view';
 import * as monthUtils from '@actual-app/core/shared/months';
 import { css } from '@emotion/css';
@@ -68,7 +69,8 @@ export function BudgetSummary({ month }: BudgetSummaryProps) {
             ? theme.budgetCurrentMonth
             : theme.budgetOtherMonth,
         boxShadow: styles.cardShadow,
-        borderRadius: 6,
+        border: `1px solid ${theme.cardBorder}`,
+        borderRadius: radius.lg,
         marginLeft: 0,
         marginRight: 0,
         marginTop: 5,
@@ -122,8 +124,9 @@ export function BudgetSummary({ month }: BudgetSummaryProps) {
             className={css({
               textAlign: 'center',
               marginTop: 3,
-              fontSize: 18,
-              fontWeight: 500,
+              fontSize: 17,
+              fontWeight: 600,
+              letterSpacing: '-0.01em',
               textDecorationSkip: 'ink',
             })}
           >
@@ -239,8 +242,8 @@ export function BudgetSummary({ month }: BudgetSummaryProps) {
             style={{
               alignSelf: 'center',
               alignItems: 'flex-start',
-              backgroundColor: theme.budgetHeaderCurrentMonth,
-              borderRadius: 4,
+              backgroundColor: theme.surfaceSubtle,
+              borderRadius: radius.md,
               padding: '10px 15px',
               marginTop: 13,
             }}

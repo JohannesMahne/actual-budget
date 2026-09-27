@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Block } from '@actual-app/components/block';
 import { styles } from '@actual-app/components/styles';
 import { theme } from '@actual-app/components/theme';
+import { radius } from '@actual-app/components/tokens';
 import { Tooltip } from '@actual-app/components/tooltip';
 import { View } from '@actual-app/components/view';
 import { css } from '@emotion/css';
@@ -27,6 +28,7 @@ type ToBudgetAmountProps = {
   onClick: () => void;
   onContextMenu?: MouseEventHandler;
   isTotalsListTooltipDisabled?: boolean;
+  showStatus?: boolean;
 };
 
 export function ToBudgetAmount({
@@ -36,6 +38,7 @@ export function ToBudgetAmount({
   onClick,
   isTotalsListTooltipDisabled = false,
   onContextMenu,
+  showStatus = false,
 }: ToBudgetAmountProps) {
   const { t } = useTranslation();
   const sheetName = useEnvelopeSheetName(envelopeBudget.toBudget);
@@ -56,7 +59,18 @@ export function ToBudgetAmount({
 
   return (
     <View style={{ alignItems: 'center', ...style }}>
-      <Block>{isNegative ? t('Overbudgeted:') : t('To Budget:')}</Block>
+      <Block
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          color: theme.pageTextLight,
+          marginBottom: 2,
+        }}
+      >
+        {isNegative ? t('Overbudgeted:') : t('To Budget:')}
+      </Block>
       <View>
         <Tooltip
           content={
@@ -83,7 +97,7 @@ export function ToBudgetAmount({
               className={css([
                 styles.veryLargeText,
                 {
-                  fontWeight: 400,
+                  fontWeight: 600,
                   userSelect: 'none',
                   cursor: 'pointer',
                   color: isPositive
@@ -109,6 +123,33 @@ export function ToBudgetAmount({
           </PrivacyFilter>
         </Tooltip>
       </View>
+      {showStatus && (
+        <View
+          style={{
+            marginTop: 8,
+            padding: '3px 10px',
+            borderRadius: radius.pill,
+            fontSize: 12,
+            fontWeight: 500,
+            color: isNegative
+              ? theme.errorText
+              : isPositive
+                ? theme.noticeText
+                : theme.pageTextLight,
+            backgroundColor: isNegative
+              ? theme.errorBackground
+              : isPositive
+                ? theme.noticeBackgroundLight
+                : theme.surfaceSubtle,
+          }}
+        >
+          {isNegative
+            ? t('You have assigned more than you have')
+            : isPositive
+              ? t('Ready to assign')
+              : t('All money has been assigned')}
+        </View>
+      )}
     </View>
   );
 }

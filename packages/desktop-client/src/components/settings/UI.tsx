@@ -6,7 +6,7 @@ import { useLocation } from 'react-router';
 import type { CSSProperties } from '@actual-app/components/styles';
 import { Text } from '@actual-app/components/text';
 import { theme } from '@actual-app/components/theme';
-import { tokens } from '@actual-app/components/tokens';
+import { radius, shadows, tokens } from '@actual-app/components/tokens';
 import { View } from '@actual-app/components/view';
 import { css } from '@emotion/css';
 
@@ -23,12 +23,13 @@ export const Setting = ({ primaryAction, style, children }: SettingProps) => {
     <View
       className={css([
         {
-          backgroundColor: theme.pillBackground,
+          backgroundColor: theme.cardBackground,
           alignSelf: 'flex-start',
           alignItems: 'flex-start',
-          padding: 15,
-          borderRadius: 4,
-          border: '1px solid ' + theme.pillBorderDark,
+          padding: 20,
+          borderRadius: radius.lg,
+          border: '1px solid ' + theme.cardBorder,
+          boxShadow: shadows.xs,
           width: '100%',
         },
         style,
@@ -36,8 +37,10 @@ export const Setting = ({ primaryAction, style, children }: SettingProps) => {
     >
       <View
         style={{
-          marginBottom: primaryAction ? 10 : 0,
-          lineHeight: 1.5,
+          marginBottom: primaryAction ? 14 : 0,
+          lineHeight: 1.55,
+          color: theme.pageTextLight,
+          '& strong': { color: theme.pageTextDark, fontWeight: 600 },
           gap: 10,
         }}
       >
@@ -76,7 +79,14 @@ export const AdvancedToggle = ({ children }: AdvancedToggleProps) => {
         }
       }}
     >
-      <View style={{ fontSize: 20, fontWeight: 500, flexShrink: 0 }}>
+      <View
+        style={{
+          fontSize: 18,
+          fontWeight: 650,
+          letterSpacing: '-0.01em',
+          flexShrink: 0,
+        }}
+      >
         <Trans>Advanced Settings</Trans>
       </View>
       {children}
@@ -117,7 +127,9 @@ export function Column({
         ...style,
       }}
     >
-      <Text style={{ fontWeight: 500 }}>{title}</Text>
+      <Text style={{ fontWeight: 600, color: theme.pageTextDark }}>
+        {title}
+      </Text>
       <View style={{ alignItems: 'flex-start', gap: '1em', width: '100%' }}>
         {children}
       </View>

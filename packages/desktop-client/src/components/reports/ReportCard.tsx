@@ -6,6 +6,7 @@ import { Button } from '@actual-app/components/button';
 import { useResponsive } from '@actual-app/components/hooks/useResponsive';
 import { SvgDotsHorizontalTriple } from '@actual-app/components/icons/v1';
 import { theme } from '@actual-app/components/theme';
+import { radius, shadows } from '@actual-app/components/tokens';
 import { View } from '@actual-app/components/view';
 
 import { useContextMenu } from '#hooks/useContextMenu';
@@ -19,6 +20,7 @@ import {
 } from '#reports/mutations';
 
 import { NON_DRAGGABLE_AREA_CLASS_NAME } from './constants';
+import { ReportCardValueSkeleton } from './ReportCardValueSkeleton';
 
 type ReportCardProps = {
   widgetId: string;
@@ -69,13 +71,14 @@ export function ReportCard({
     <View
       ref={ref}
       style={{
-        backgroundColor: theme.tableBackground,
-        borderBottomLeftRadius: 2,
-        borderBottomRightRadius: 2,
+        backgroundColor: theme.cardBackground,
+        border: '1px solid ' + theme.cardBorder,
+        borderRadius: radius.lg,
+        overflow: 'hidden',
         width: '100%',
         height: '100%',
-        boxShadow: '0 2px 6px rgba(0, 0, 0, .15)',
-        transition: 'box-shadow .25s',
+        boxShadow: shadows.xs,
+        transition: 'box-shadow .2s ease, border-color .2s ease',
         ...(isEditing
           ? {
               '& .recharts-surface:hover': {
@@ -91,7 +94,9 @@ export function ReportCard({
               },
             }),
         ':hover': {
-          ...(to ? { boxShadow: '0 4px 6px rgba(0, 0, 0, .15)' } : null),
+          ...(to
+            ? { boxShadow: shadows.md, borderColor: theme.tableBorderHover }
+            : null),
           ...(isEditing ? { cursor: 'move', filter: 'grayscale(0)' } : null),
         },
         ...(to ? null : containerProps),
@@ -101,7 +106,7 @@ export function ReportCard({
       {/* we render the content only if it is in the viewport
       this reduces the amount of concurrent server api calls and thus
       has a better performance */}
-      {isInViewport || hasRendered ? children : null}
+      {isInViewport || hasRendered ? children : <ReportCardValueSkeleton />}
     </View>
   );
 
@@ -115,6 +120,7 @@ export function ReportCard({
             height: '100%',
             width: '100%',
             background: 'transparent',
+            borderRadius: radius.lg,
             padding: 0,
             textAlign: 'left',
             overflow: 'visible',

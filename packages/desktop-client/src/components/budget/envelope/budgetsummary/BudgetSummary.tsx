@@ -10,6 +10,7 @@ import {
 import { Popover } from '@actual-app/components/popover';
 import { styles } from '@actual-app/components/styles';
 import { theme } from '@actual-app/components/theme';
+import { radius } from '@actual-app/components/tokens';
 import { View } from '@actual-app/components/view';
 import * as monthUtils from '@actual-app/core/shared/months';
 import { css } from '@emotion/css';
@@ -71,7 +72,8 @@ export const BudgetSummary = memo(({ month }: BudgetSummaryProps) => {
             ? theme.budgetCurrentMonth
             : theme.budgetOtherMonth,
         boxShadow: styles.cardShadow,
-        borderRadius: 6,
+        border: `1px solid ${theme.cardBorder}`,
+        borderRadius: radius.lg,
         marginLeft: 0,
         marginRight: 0,
         marginTop: 5,
@@ -126,11 +128,12 @@ export const BudgetSummary = memo(({ month }: BudgetSummaryProps) => {
               {
                 textAlign: 'center',
                 marginTop: 3,
-                fontSize: 18,
-                fontWeight: 500,
+                fontSize: 17,
+                fontWeight: 600,
+                letterSpacing: '-0.01em',
                 textDecorationSkip: 'ink',
               },
-              currentMonth === month && { fontWeight: 'bold' },
+              currentMonth === month && { fontWeight: 700 },
             ])}
           >
             {monthUtils.format(month, 'MMMM', locale)}
@@ -270,15 +273,15 @@ export const BudgetSummary = memo(({ month }: BudgetSummaryProps) => {
             <TotalsList
               prevMonthName={prevMonthName}
               style={{
-                padding: '5px 0',
-                marginTop: 17,
-                backgroundColor: theme.budgetHeaderCurrentMonth,
+                padding: '10px 0',
+                marginTop: 16,
+                backgroundColor: theme.surfaceSubtle,
                 borderTopWidth: 1,
                 borderBottomWidth: 1,
-                borderColor: theme.tableBorder,
+                borderColor: theme.borderSubtle,
               }}
             />
-            <View style={{ margin: '23px 0' }}>
+            <View style={{ margin: '20px 0' }}>
               <ToBudget
                 prevMonthName={prevMonthName}
                 month={month}

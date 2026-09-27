@@ -143,6 +143,12 @@ export function BalanceWithCarryover({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         textAlign: 'right',
+        ...(balanceValue < 0 && {
+          backgroundColor: theme.errorBackground,
+          borderRadius: 999,
+          padding: '1px 7px',
+          fontWeight: 500,
+        }),
         ...(!isDisabled && {
           cursor: 'pointer',
         }),
@@ -252,7 +258,7 @@ export function BalanceWithCarryover({
                 {GoalStatusDisplay(balanceValue, type)}
               </View>
             }
-            style={{ ...styles.tooltip, borderRadius: '0px 5px 5px 0px' }}
+            style={styles.tooltip}
             placement="bottom"
             triggerProps={{
               delay: 750,

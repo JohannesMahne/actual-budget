@@ -2,6 +2,7 @@ import React, { memo, useMemo, useState } from 'react';
 
 import { styles } from '@actual-app/components/styles';
 import { theme } from '@actual-app/components/theme';
+import { radius } from '@actual-app/components/tokens';
 import { View } from '@actual-app/components/view';
 import type {
   CategoryEntity,
@@ -245,7 +246,9 @@ export const BudgetCategories = memo<BudgetCategoriesProps>(
           backgroundColor: theme.budgetCurrentMonth, // match budget colors, not generic table colors.
           overflow: 'hidden',
           boxShadow: styles.cardShadow,
-          borderRadius: '0 0 4px 4px',
+          border: '1px solid ' + theme.cardBorder,
+          borderTop: 'none',
+          borderRadius: `0 0 ${radius.lg}px ${radius.lg}px`,
           flex: 1,
         }}
       >
