@@ -209,7 +209,7 @@
   --color-formInputBorderSelected: var(--palette-teal600);
   --color-formInputText: var(--palette-slate900);
   --color-formInputTextSelected: var(--palette-slate50);
-  --color-formInputTextPlaceholder: var(--palette-slate400);
+  --color-formInputTextPlaceholder: var(--palette-slate500);
   --color-formInputTextPlaceholderSelected: var(--palette-slate300);
   --color-formInputTextSelection: var(--palette-teal100);
   --color-formInputShadowSelected: var(--color-focusRing);

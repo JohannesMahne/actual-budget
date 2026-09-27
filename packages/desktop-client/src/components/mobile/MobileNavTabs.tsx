@@ -219,8 +219,10 @@ export function MobileNavTabs() {
         y,
         touchAction: 'pan-x',
         backgroundColor: theme.mobileNavBackground,
-        borderTop: `1px solid ${theme.menuBorder}`,
-        ...styles.shadow,
+        borderTop: `1px solid ${theme.borderSubtle}`,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        boxShadow: '0 -8px 24px -12px rgba(16, 24, 40, 0.18)',
         height: TOTAL_HEIGHT + PILL_HEIGHT,
         width: '100%',
         position: 'fixed',
@@ -233,9 +235,9 @@ export function MobileNavTabs() {
       <View>
         <div
           style={{
-            backgroundColor: theme.pillBorder,
+            backgroundColor: theme.pillBorderDark,
             borderRadius: 10,
-            width: 30,
+            width: 36,
             marginTop: 5,
             marginBottom: 5,
             padding: 2,
@@ -285,6 +287,9 @@ function NavTab({ Icon: TabIcon, name, path, style, onClick }: NavTabProps) {
         textAlign: 'center',
         textWrap: 'balance',
         userSelect: 'none',
+        gap: 4,
+        fontSize: 12,
+        fontWeight: isActive ? 600 : 500,
         ...style,
       })}
       onClick={onClick}

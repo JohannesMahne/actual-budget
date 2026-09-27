@@ -4,6 +4,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Button } from '@actual-app/components/button';
+import { SvgFilter2 } from '@actual-app/components/icons/v2';
 import { SpaceBetween } from '@actual-app/components/space-between';
 import { styles } from '@actual-app/components/styles';
 import { Text } from '@actual-app/components/text';
@@ -29,6 +30,7 @@ import { useDispatch } from '#redux';
 import { friendlyOp, mapField } from '#util/rule';
 import { describeSchedule } from '#util/schedule';
 
+import { EmptyState } from './common/EmptyState';
 import { InfiniteScrollWrapper } from './common/InfiniteScrollWrapper';
 import { Link } from './common/Link';
 import { Search } from './common/Search';
@@ -334,7 +336,17 @@ export function ManageRules({
           <RulesHeader />
           <InfiniteScrollWrapper loadMore={loadMore}>
             {filteredRules.length === 0 ? (
-              <EmptyMessage text={t('No rules')} style={{ marginTop: 15 }} />
+              <EmptyState
+                icon={SvgFilter2}
+                title={filter ? t('No matching rules') : t('No rules')}
+                description={
+                  filter
+                    ? t('Try a different search term.')
+                    : t(
+                        'Rules tidy up payee names and set categories automatically as transactions arrive.',
+                      )
+                }
+              />
             ) : (
               <RulesList
                 rules={filteredRules}
@@ -370,22 +382,5 @@ export function ManageRules({
         </View>
       </View>
     </SelectedProvider>
-  );
-}
-
-function EmptyMessage({ text, style }) {
-  return (
-    <View
-      style={{
-        textAlign: 'center',
-        color: theme.pageTextSubdued,
-        fontStyle: 'italic',
-        fontSize: 13,
-        marginTop: 5,
-        style,
-      }}
-    >
-      {text}
-    </View>
   );
 }

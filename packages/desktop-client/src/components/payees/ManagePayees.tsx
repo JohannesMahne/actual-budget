@@ -14,6 +14,7 @@ import { groupById } from '@actual-app/core/shared/util';
 import type { Diff } from '@actual-app/core/shared/util';
 import type { PayeeEntity } from '@actual-app/core/types/models';
 
+import { EmptyState } from '#components/common/EmptyState';
 import { Search } from '#components/common/Search';
 import { Cell, SelectCell, TableHeader } from '#components/table';
 import {
@@ -293,17 +294,19 @@ export const ManagePayees = ({
         <View style={styles.tableContainer}>
           <PayeeTableHeader />
           {filteredPayees.length === 0 ? (
-            <View
-              style={{
-                textAlign: 'center',
-                color: theme.pageTextSubdued,
-                fontStyle: 'italic',
-                fontSize: 13,
-                marginTop: 5,
-              }}
-            >
-              <Trans>No payees</Trans>
-            </View>
+            <EmptyState
+              title={<Trans>No payees</Trans>}
+              description={
+                filter ? (
+                  <Trans>Try a different search term.</Trans>
+                ) : (
+                  <Trans>
+                    Payees are created automatically as you add or import
+                    transactions.
+                  </Trans>
+                )
+              }
+            />
           ) : (
             <PayeeTable
               ref={table}

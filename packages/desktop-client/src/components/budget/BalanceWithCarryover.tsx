@@ -144,6 +144,7 @@ export function BalanceWithCarryover({
         textOverflow: 'ellipsis',
         textAlign: 'right',
         ...(balanceValue < 0 && {
+          color: theme.errorText,
           backgroundColor: theme.errorBackground,
           borderRadius: 999,
           padding: '1px 7px',

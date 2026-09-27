@@ -333,6 +333,10 @@ export function Titlebar({ style }: TitlebarProps) {
         '& *': {
           pointerEvents: 'auto',
         },
+        '& button': {
+          minHeight: 28,
+          minWidth: 28,
+        },
         ...(!Platform.isBrowser && Platform.OS === 'mac' && floatingSidebar
           ? { paddingLeft: 80 }
           : {}),

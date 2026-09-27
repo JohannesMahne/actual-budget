@@ -10,6 +10,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { Trans } from 'react-i18next';
 import { Navigate, useLocation, useParams } from 'react-router';
 
+import { Button } from '@actual-app/components/button';
+import { SvgSearch1 } from '@actual-app/components/icons/v2';
 import { styles } from '@actual-app/components/styles';
 import { theme } from '@actual-app/components/theme';
 import { View } from '@actual-app/components/view';
@@ -47,6 +49,7 @@ import {
 } from '#accounts';
 import { markAccountRead } from '#accounts/accountsSlice';
 import * as reconciliation from '#accounts/reconciliation';
+import { EmptyState } from '#components/common/EmptyState';
 import { FeatureErrorFallback } from '#components/FeatureErrorFallback';
 import type { SavedFilter } from '#components/filters/SavedFilterMenuButton';
 import type {
@@ -1958,16 +1961,37 @@ class AccountInternal extends PureComponent<
                         }
                       />
                     ) : !loading ? (
-                      <View
-                        style={{
-                          color: theme.tableText,
-                          marginTop: 20,
-                          textAlign: 'center',
-                          fontStyle: 'italic',
-                        }}
-                      >
-                        <Trans>No transactions</Trans>
-                      </View>
+                      transactionsFiltered || !account ? (
+                        <EmptyState
+                          icon={SvgSearch1}
+                          title={<Trans>No transactions</Trans>}
+                        />
+                      ) : (
+                        <EmptyState
+                          icon={SvgSearch1}
+                          title={<Trans>No transactions</Trans>}
+                          description={
+                            <Trans>
+                              Add a transaction by hand, or import a bank
+                              statement (OFX, QFX, CSV or QIF) to fill this
+                              account.
+                            </Trans>
+                          }
+                          actions={
+                            <>
+                              <Button
+                                variant="primary"
+                                onPress={this.onAddTransaction}
+                              >
+                                <Trans>Add transaction</Trans>
+                              </Button>
+                              <Button onPress={() => void this.onImport()}>
+                                <Trans>Import file</Trans>
+                              </Button>
+                            </>
+                          }
+                        />
+                      )
                     ) : null
                   }
                   onSort={this.onSort}

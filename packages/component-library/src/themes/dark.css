@@ -8,7 +8,7 @@
   --color-pageBackgroundLineBottom: var(--palette-slate700);
   --color-pageText: var(--palette-slate150);
   --color-pageTextLight: var(--palette-slate300);
-  --color-pageTextSubdued: var(--palette-slate500);
+  --color-pageTextSubdued: var(--palette-slate400);
   --color-pageTextDark: var(--palette-slate50);
   --color-pageTextPositive: var(--palette-teal300);
   --color-pageTextLink: var(--palette-teal300);
@@ -213,7 +213,7 @@
   --color-formInputBorderSelected: var(--palette-teal400);
   --color-formInputText: var(--palette-slate100);
   --color-formInputTextSelected: var(--palette-black);
-  --color-formInputTextPlaceholder: var(--palette-slate500);
+  --color-formInputTextPlaceholder: var(--palette-slate400);
   --color-formInputTextPlaceholderSelected: var(--palette-slate400);
   --color-formInputTextSelection: var(--palette-slate800);
   --color-formInputShadowSelected: var(--color-focusRing);
